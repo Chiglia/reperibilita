@@ -1,1 +1,144 @@
-<p-card> </p-card>
+<p-card header="Ore Lavorative" class="mb-4">
+  <div class="p-fluid">
+    <div class="p-field">
+      <label for="oreFeriali">Ore Lavorative Feriali (hh - hh):</label>
+      <p-inputmask
+        id="oreFeriali"
+        mask="99 - 99"
+        [(ngModel)]="maskValues[0]"
+        placeholder="08 - 18"
+      ></p-inputmask>
+    </div>
+
+    <div class="p-field">
+      <label for="oreFestive">Ore Lavorative Festive (hh - hh):</label>
+      <p-inputmask
+        id="oreFestive"
+        mask="99 - 99"
+        [(ngModel)]="maskValues[1]"
+        placeholder="08 - 18"
+      ></p-inputmask>
+    </div>
+
+    <div class="p-field">
+      <label for="tariffaOraria">Tariffa Oraria (€):</label>
+      <p-inputNumber
+        id="tariffaOraria"
+        [(ngModel)]="hourlyRate"
+        mode="currency"
+        currency="EUR"
+        locale="it"
+        [min]="0"
+      ></p-inputNumber>
+    </div>
+
+    <div class="p-field">
+      <label for="tariffaFestiva">Tariffa Festiva (€):</label>
+      <p-inputNumber
+        id="tariffaFestiva"
+        [(ngModel)]="holidayRate"
+        mode="currency"
+        currency="EUR"
+        locale="it"
+        [min]="0"
+      ></p-inputNumber>
+    </div>
+
+    <div class="p-field">
+      <label for="percentualeOre">Percentuale Ore Feriali (%):</label>
+      <p-inputNumber
+        id="percentualeOre"
+        [(ngModel)]="workdayPercentage"
+        [min]="0"
+        [max]="100"
+      ></p-inputNumber>
+    </div>
+
+    <div class="p-field">
+      <label for="oreExtra">Ore Extra:</label>
+      <p-inputNumber
+        id="oreExtra"
+        [(ngModel)]="extraHours"
+        [min]="0"
+      ></p-inputNumber>
+    </div>
+
+    <div class="p-field">
+      <label for="tariffaExtraFeriali">Tariffa Ore Extra Feriali (€):</label>
+      <p-inputNumber
+        id="tariffaExtraFeriali"
+        [(ngModel)]="ferialExtraRate"
+        mode="currency"
+        currency="EUR"
+        locale="it"
+        [min]="0"
+      ></p-inputNumber>
+    </div>
+
+    <div class="p-field">
+      <label for="tariffaExtraFestive">Tariffa Ore Extra Festive (€):</label>
+      <p-inputNumber
+        id="tariffaExtraFestive"
+        [(ngModel)]="holidayExtraRate"
+        mode="currency"
+        currency="EUR"
+        locale="it"
+        [min]="0"
+      ></p-inputNumber>
+    </div>
+
+    <div class="p-field">
+      <button
+        pButton
+        label="Calcola Ore Annue"
+        (click)="calcolaOreAnnuali()"
+      ></button>
+    </div>
+
+    <div class="p-field">
+      <button
+        pButton
+        label="Calcola Ore Extra per Percentuale"
+        (click)="calcolaOreExtraPerPercentuale()"
+      ></button>
+    </div>
+  </div>
+</p-card>
+
+<p-card header="Risultati" class="mt-4">
+  <div *ngIf="oreFerialiAnnuali !== null && oreFestiveAnnuali !== null">
+    <p><strong>Ore Feriali Annuali:</strong> {{ oreFerialiAnnuali }} ore</p>
+    <p><strong>Ore Festive Annuali:</strong> {{ oreFestiveAnnuali }} ore</p>
+    <p>
+      <strong>Costo Totale Annuale:</strong>
+      {{ totalAnnualCost | currency : "EUR" }}
+    </p>
+  </div>
+
+  <div
+    *ngIf="
+      oreExtraFerialiAnnualCost !== null && oreExtraFestiveAnnualCost !== null
+    "
+  >
+    <p>
+      <strong>Ore Extra Feriali Annuali:</strong>
+      {{ (oreExtraFeriali ?? 0) * 260 }} ore
+    </p>
+    <p>
+      <strong>Ore Extra Festive Annuali:</strong>
+      {{ (oreExtraFestive ?? 0) * 104 }} ore
+    </p>
+    <p>
+      <strong>Costo Ore Extra Feriali Annuali:</strong>
+      {{ oreExtraFerialiAnnualCost | currency : "EUR" }}
+    </p>
+    <p>
+      <strong>Costo Ore Extra Festive Annuali:</strong>
+      {{ oreExtraFestiveAnnualCost | currency : "EUR" }}
+    </p>
+  </div>
+
+  <div *ngIf="differenzaOreExtra !== null">
+    <p><strong>Differenza Ore Extra:</strong> {{ differenzaOreExtra }} ore</p>
+  </div>
+</p-card>
