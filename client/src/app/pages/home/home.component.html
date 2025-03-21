@@ -33,14 +33,12 @@
     </div>
 
     <div class="p-field">
-      <label for="tariffaFestiva">Tariffa Festiva (€):</label>
+      <label for="coefficienteFestivo">Coefficiente Festivo:</label>
       <p-inputNumber
-        id="tariffaFestiva"
-        [(ngModel)]="holidayRate"
-        mode="currency"
-        currency="EUR"
-        locale="it"
-        [min]="0"
+        id="coefficienteFestivo"
+        [(ngModel)]="coefficienteFestivo"
+        [min]="1"
+        [step]="0.1"
       ></p-inputNumber>
     </div>
 
@@ -76,12 +74,20 @@
     </div>
 
     <div class="p-field">
-      <label for="tariffaExtraFestive">Tariffa Ore Extra Festive (€):</label>
+      <label for="coefficienteFestivo">Coefficiente Festivo:</label>
+      <p-inputNumber
+        id="coefficienteFestivo"
+        [(ngModel)]="coefficienteFestivoExtra"
+        [min]="1"
+        [step]="0.1"
+      ></p-inputNumber>
+    </div>
+
+    <div class="p-field">
+      <label for="tariffaExtraFestive">Durata Reperibilità:</label>
       <p-inputNumber
         id="tariffaExtraFestive"
-        [(ngModel)]="holidayExtraRate"
-        mode="currency"
-        currency="EUR"
+        [(ngModel)]="durataReperibilita"
         locale="it"
         [min]="0"
       ></p-inputNumber>
@@ -94,51 +100,29 @@
         (click)="calcolaOreAnnuali()"
       ></button>
     </div>
-
-    <div class="p-field">
-      <button
-        pButton
-        label="Calcola Ore Extra per Percentuale"
-        (click)="calcolaOreExtraPerPercentuale()"
-      ></button>
-    </div>
   </div>
 </p-card>
 
 <p-card header="Risultati" class="mt-4">
-  <div *ngIf="oreFerialiAnnuali !== null && oreFestiveAnnuali !== null">
-    <p><strong>Ore Feriali Annuali:</strong> {{ oreFerialiAnnuali }} ore</p>
-    <p><strong>Ore Festive Annuali:</strong> {{ oreFestiveAnnuali }} ore</p>
+  <div *ngIf="totalAnnualCost !== null && costoTotAnnuale !== null">
     <p>
       <strong>Costo Totale Annuale:</strong>
       {{ totalAnnualCost | currency : "EUR" }}
     </p>
-  </div>
 
-  <div
-    *ngIf="
-      oreExtraFerialiAnnualCost !== null && oreExtraFestiveAnnualCost !== null
-    "
-  >
     <p>
-      <strong>Ore Extra Feriali Annuali:</strong>
-      {{ (oreExtraFeriali ?? 0) * 260 }} ore
+      <strong>Costo Totale Annuale (con ore extra):</strong>
+      {{ costoTotAnnuale | currency : "EUR" }}
     </p>
-    <p>
-      <strong>Ore Extra Festive Annuali:</strong>
-      {{ (oreExtraFestive ?? 0) * 104 }} ore
-    </p>
-    <p>
-      <strong>Costo Ore Extra Feriali Annuali:</strong>
-      {{ oreExtraFerialiAnnualCost | currency : "EUR" }}
-    </p>
-    <p>
-      <strong>Costo Ore Extra Festive Annuali:</strong>
-      {{ oreExtraFestiveAnnualCost | currency : "EUR" }}
-    </p>
-  </div>
 
-  <div *ngIf="differenzaOreExtra !== null">
-    <p><strong>Differenza Ore Extra:</strong> {{ differenzaOreExtra }} ore</p>
+    <!-- <p>
+      <strong>Costo Totale Annuale (con ore extra):</strong>
+      {{ repMensile}}
+    </p> -->
+
+    <!-- <p>
+      <strong>Reperibilità Totale:</strong>
+      {{ totRep | currency : "EUR" }}
+    </p> -->
   </div>
 </p-card>

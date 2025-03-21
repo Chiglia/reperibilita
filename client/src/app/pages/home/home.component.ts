@@ -24,20 +24,17 @@ import { InputMaskModule } from "primeng/inputmask";
 export class HomeComponent {
   maskValues: string[] = ["", ""];
   hourlyRate: number | null = null;
-  holidayRate: number | null = null;
+  coefficienteFestivo: number | null = null;
   workdayPercentage: number | null = null;
   extraHours: number | null = null;
   ferialExtraRate: number | null = null;
-  holidayExtraRate: number | null = null;
+  coefficienteFestivoExtra: number | null = null;
+  durataReperibilita: number | null = null;
+  repMensile: number | null = null;
+  totRep: number | null = null;
 
-  oreFerialiAnnuali: number | null = null;
-  oreFestiveAnnuali: number | null = null;
-  oreExtraFeriali: number | null = null;
-  oreExtraFestive: number | null = null;
-  differenzaOreExtra: number | null = null;
   totalAnnualCost: number | null = null;
-  oreExtraFerialiAnnualCost: number | null = null;
-  oreExtraFestiveAnnualCost: number | null = null;
+  costoTotAnnuale: number | null = null;
 
   // Funzione per calcolare le ore annuali normali
   calcolaOreAnnuali(): void {
@@ -45,43 +42,38 @@ export class HomeComponent {
       this.maskValues[0] &&
       this.maskValues[1] &&
       this.hourlyRate &&
-      this.holidayRate
-    ) {
-      const feriali = this.calcolaOreGiornaliere(this.maskValues[0]);
-      const festive = this.calcolaOreGiornaliere(this.maskValues[1]);
-
-      this.oreFerialiAnnuali = feriali * 260;
-      this.oreFestiveAnnuali = festive * 104;
-
-      // Calcola il costo annuale totale (feriali + festive)
-      this.totalAnnualCost =
-        this.oreFerialiAnnuali * this.hourlyRate +
-        this.oreFestiveAnnuali * this.holidayRate;
-    }
-  }
-
-  // Funzione per calcolare le ore extra
-  calcolaOreExtraPerPercentuale(): void {
-    if (
+      this.coefficienteFestivo &&
       this.extraHours !== null &&
       this.workdayPercentage !== null &&
       this.ferialExtraRate !== null &&
-      this.holidayExtraRate !== null
+      this.coefficienteFestivoExtra !== null &&
+      this.durataReperibilita !== null
     ) {
+      const feriali = this.calcolaOreGiornaliere(this.maskValues[0]) * 260;
+      const festive = this.calcolaOreGiornaliere(this.maskValues[1]) * 104;
+
+      const holidayRate = this.hourlyRate * this.coefficienteFestivo;
+      const holidayExtraRate =
+        this.ferialExtraRate * this.coefficienteFestivoExtra;
+
+      // Calcola il costo annuale totale (feriali + festive)
+      this.totalAnnualCost = feriali * this.hourlyRate + festive * holidayRate;
+
       const oreExtraFeriali = (this.extraHours * this.workdayPercentage) / 100;
       const oreExtraFestive = this.extraHours - oreExtraFeriali;
 
-      this.oreExtraFeriali = oreExtraFeriali;
-      this.oreExtraFestive = oreExtraFestive;
+      const totFeriale = feriali - oreExtraFeriali;
+      const totFestivo = festive - oreExtraFestive;
 
-      // Calcola il costo annuale per le ore extra
-      this.oreExtraFerialiAnnualCost =
-        oreExtraFeriali * 260 * this.ferialExtraRate;
-      this.oreExtraFestiveAnnualCost =
-        oreExtraFestive * 104 * this.holidayExtraRate;
+      this.costoTotAnnuale =
+        oreExtraFeriali * this.ferialExtraRate +
+        oreExtraFestive * holidayExtraRate +
+        totFeriale * this.hourlyRate +
+        totFestivo * holidayRate;
 
-      // Calcola la differenza tra le ore extra
-      this.differenzaOreExtra = oreExtraFeriali - oreExtraFestive;
+      this.repMensile = this.costoTotAnnuale / 12;
+
+      this.totRep = this.repMensile * this.durataReperibilita;
     }
   }
 
