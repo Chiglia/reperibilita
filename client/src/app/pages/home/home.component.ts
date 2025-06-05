@@ -6,6 +6,7 @@ import { ButtonModule } from "primeng/button";
 import { FormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { InputMaskModule } from "primeng/inputmask";
+import { SliderModule } from "primeng/slider";
 
 @Component({
   selector: "app-home",
@@ -17,6 +18,7 @@ import { InputMaskModule } from "primeng/inputmask";
     ButtonModule,
     CommonModule,
     InputMaskModule,
+    SliderModule,
   ],
   templateUrl: "./home.component.html",
   styles: ``,
